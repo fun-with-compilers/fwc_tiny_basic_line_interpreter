@@ -14,6 +14,7 @@ class TinyBasicStatement(Enum):
     CLS = "CLS"
     PRINT = "PRINT"
     INPUT = "INPUT"
+    NEW = "NEW"
     LIST = "LIST"
     LOAD = "LOAD"
     SAVE = "SAVE"

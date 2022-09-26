@@ -15,6 +15,12 @@ def exec_line(vm: TinyInterpreterVM, line: str):
         interpreter.interpret()
 
 
+def run_tiny_basic_program(filename: str, io = TinyConsoleIo()):
+    vm = TinyInterpreterVM(io)
+    vm.execute(f'LOAD "{filename}"')
+    vm.execute('RUN')
+
+
 def run_tiny_basic(io = TinyConsoleIo()):
     io.print_msg('TinyBasic Interpreter v1.00')
     io.print_msg('Copyright (c) 1985-2022. Ákos Nagy')

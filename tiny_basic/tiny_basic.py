@@ -22,6 +22,7 @@ class TinyBasicInterpreter(TinyBasicLexer):
             TinyBasicStatement.CLS: self.stmt_cls,
             TinyBasicStatement.PRINT: self.stmt_print,
             TinyBasicStatement.INPUT: self.stmt_input,
+            TinyBasicStatement.NEW: self.stmt_new,
             TinyBasicStatement.LIST: self.stmt_list,
             TinyBasicStatement.READ: self.stmt_read,
             TinyBasicStatement.WRITE: self.stmt_write,
@@ -104,6 +105,9 @@ class TinyBasicInterpreter(TinyBasicLexer):
 
     def stmt_end(self):
         raise TinyBasicRunStopException()
+
+    def stmt_new(self):
+        self.vm.text.reset()
 
     def stmt_list(self):
         start = None

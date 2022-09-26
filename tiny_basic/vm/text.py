@@ -6,6 +6,9 @@ class SourceText:
     def __init__(self):
         self.text = {}
 
+    def reset(self):
+        self.text = {}
+
     def delete_text(self, line_number: int):
         if line_number in self.text:
             self.text.pop(line_number)
