@@ -1,0 +1,32 @@
+from enum import unique, Enum
+
+
+@unique
+class TinyBasicStatement(Enum):
+    DEBUG = "DEBUG"
+    TRACE = "TRACE"
+    REM = "REM"
+    LET = "LET"
+    DIM = "DIM"
+    GOTO = "GOTO"
+    GOSUB = "GOSUB"
+    RET = "RETURN"
+    CLS = "CLS"
+    PRINT = "PRINT"
+    INPUT = "INPUT"
+    LIST = "LIST"
+    LOAD = "LOAD"
+    SAVE = "SAVE"
+    READ = "READ"
+    WRITE = "WRITE"
+    END = "END"
+    QUIT = "QUIT"
+    RUN = "RUN"
+    RESET = "RESET"
+    CONT = "CONT"
+    IF = "IF"
+    ON = "ON"
+    FOR = "FOR"
+    NEXT = "NEXT"
+    REPEAT = "REPEAT"
+    UNTIL = "UNTIL"
