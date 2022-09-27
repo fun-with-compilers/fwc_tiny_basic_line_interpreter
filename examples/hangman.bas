@@ -9,8 +9,10 @@ lives = max_lives
 
 REM load dictionary
 READ words$, "hangman.txt"
+num_words = alen(words$)
+PRINT num_words, "words found in the dictionary"
 REM pick a random word
-word_index = RND(len(words$))
+word_index = RND(num_words)
 word$ = words$(word_index)
 
 REM disp is an array that displays the guessed part of the word
@@ -18,8 +20,9 @@ REM technically we could use just a string, but I wanted to use an array
 letters = 0
 DIM disp$(len(word$))
 FOR i=0 TO len(word$)-1
-  if MID$(word$, i) <> " " THEN GOSUB HANDLE_LETTER
-  if MID$(word$, i) = " " THEN GOSUB HANDLE_SPACE
+  is_letter = "a" <= MID$(word$, i) AND MID$(word$, i) <= "z"
+  if is_letter THEN GOSUB HANDLE_LETTER
+  if not is_letter THEN GOSUB HANDLE_SPACE
 NEXT
 
 CLS
@@ -32,7 +35,7 @@ HANDLE_LETTER:
 	RETURN
 	
 HANDLE_SPACE:
-    disp$(i)=" "
+    disp$(i)=MID$(word$, i)
 	RETURN
 	
 HANGMAN:
@@ -74,6 +77,15 @@ ERROR:
 	PRINT "LIVES LEFT: ", lives
 	if lives <= 0 THEN GOTO GAME_OVER
 	RETURN
+	
+HINT:
+	index = RND(letters)
+	FIND_UNMATCHED:
+		IF index < alen(disp$) AND disp$(index) <> "_" THEN index = index + 1 : GOTO FIND_UNMATCHED
+	IF index >= alen(disp$) OR index >= len(word$) THEN RETURN
+	guess$ = MID$(word$, index)
+	GOSUB ERROR
+	RETURN
 
 ROUND_START:
 	GOSUB PRINT_TAB
@@ -83,6 +95,7 @@ ROUND_START:
 	
 	IF guess$ = "." THEN GOTO GIVE_UP
 	IF guess$ = "?" THEN PRINT "YOU CHEATER!!!! WORD IS"; word$: GOTO ROUND_START
+	IF guess$ = "" THEN GOSUB HINT
 	IF LEN(guess$) <> 1 THEN GOSUB ERROR_LEN
 	
 	GOSUB CHECK_GUESS
@@ -99,7 +112,7 @@ GIVE_UP:
 GAME_OVER:
 	CLS
 	GOSUB HANGMAN
-	PRINT
+	PRINT ""
 	PRINT "GAME OVER, YOU ARE SO DEAD!"
 	PRINT "YOU COULDN'T GUESS"; word$;" :))))"
 	END
