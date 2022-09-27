@@ -59,17 +59,20 @@ class TinyBasicInterpreter(TinyBasicLexer):
                 raise TinyBasicException(f'Illegal statement')
             func = self.statements[statement]
             func()
-        elif self.looks_like(TinyBasicTokenType.COLON):
-            self.label()
+        elif self.looks_like(TinyBasicTokenType.IDENTIFIER):
+            name = self.expect(TinyBasicTokenType.IDENTIFIER)
+            if self.looks_like(TinyBasicTokenType.COLON):
+                self.label(name)
+            else:
+                variable_name, index = self.variable(name)
+                self.assignment(variable_name, index)
         else:
-            variable_name, index = self.variable()
-            self.assignment(variable_name, index)
+            self.fail_unexpected_token('STATEMENT')
         if self.match(TinyBasicTokenType.COLON):
             self.statement()
 
-    def label(self):
+    def label(self, label_name: str):
         self.match(TinyBasicTokenType.COLON)
-        label_name = self.expect(TinyBasicTokenType.IDENTIFIER)
         if self.has_line_number:
             self.vm.variables.write_num_var(label_name, self.line_number)
 
@@ -314,8 +317,9 @@ class TinyBasicInterpreter(TinyBasicLexer):
         else:
             raise TinyBasicException(f'Line number not found: {line_number}')
 
-    def variable(self) -> tuple[str, int]:
-        variable_name = self.expect(TinyBasicTokenType.IDENTIFIER)
+    def variable(self, variable_name: str or None = None) -> tuple[str, int]:
+        if variable_name is None:
+            variable_name = self.expect(TinyBasicTokenType.IDENTIFIER)
         index = self.indexer()
         return variable_name, index
 

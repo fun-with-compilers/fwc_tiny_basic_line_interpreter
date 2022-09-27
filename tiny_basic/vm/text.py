@@ -49,10 +49,11 @@ class SourceText:
         for line_number in self.text:
             line = self.text[line_number]
             lexer = TinyBasicLexer(line)
-            if lexer.looks_like(TinyBasicTokenType.COLON):
-                lexer.match(TinyBasicTokenType.COLON)
+            if lexer.looks_like(TinyBasicTokenType.IDENTIFIER):
                 label = lexer.expect(TinyBasicTokenType.IDENTIFIER)
-                result[label] = line_number
+                if lexer.looks_like(TinyBasicTokenType.COLON):
+                    lexer.expect(TinyBasicTokenType.COLON)
+                    result[label] = line_number
         return result
 
     def get_program_text(self, start: int or None = None, end: int or None = None) -> list[str]:

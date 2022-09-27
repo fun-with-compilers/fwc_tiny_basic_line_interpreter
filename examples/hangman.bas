@@ -4,7 +4,7 @@ REM hangman picture height is defined in the first line
 pic_height = INT(pic$(0))
 if (ALEN(pic$) - 1) MOD pic_height <> 0 THEN PRINT "Error: error in hangman.pic":END
 REM max lives is the number of pictures in hangman.pic
-max_lives = (ALEN(pic$)-1) DIV pic_height - 1
+max_lives = INT((ALEN(pic$)-1) / pic_height - 1)
 lives = max_lives
 
 REM load dictionary
@@ -26,23 +26,23 @@ CLS
 PRINT "--- THE GAME BEGINS.... ---"
 GOTO ROUND_START
 
-:HANDLE_LETTER
+HANDLE_LETTER:
 	disp$(i)="_"
 	letters = letters + 1
 	RETURN
 	
-:HANDLE_SPACE
+HANDLE_SPACE:
     disp$(i)=" "
 	RETURN
 	
-:HANGMAN
+HANGMAN:
 	pic_start = 1 + (max_lives-lives)*pic_height
 	for i = pic_start to pic_start + pic_height - 1
 		print pic$(i)
 	next i
 	return
 
-:PRINT_TAB
+PRINT_TAB:
 	GOSUB HANGMAN
 	FOR i=0 TO alen(disp$)-1
 		print disp$(i),
@@ -50,32 +50,32 @@ GOTO ROUND_START
 	PRINT " -- (LIVES LEFT: "; lives; ")"
 	RETURN
 	
-:FOUND_MATCH
+FOUND_MATCH:
 	disp$(i)=guess$
 	letters = letters - 1
 	found = 1
 	RETURN
 	
-:CHECK_GUESS
+CHECK_GUESS:
 	found = 0
 	FOR i=0 TO len(word$)-1
 		IF MID$(word$, i) = guess$ AND disp$(i) = "_" THEN GOSUB FOUND_MATCH
 	NEXT
 	RETURN
 
-:ERROR_WRONG
+ERROR_WRONG:
 	PRINT "HAHAHA! Wrong guess: "; guess$
 	GOTO ERROR
-:ERROR_LEN
+ERROR_LEN:
 	PRINT "GUESS MUST BE EXACTLY ONE LETTER!"
 	GOTO ERROR
-:ERROR
+ERROR:
 	lives = lives - 1
 	PRINT "LIVES LEFT: ", lives
 	if lives <= 0 THEN GOTO GAME_OVER
 	RETURN
 
-:ROUND_START
+ROUND_START:
 	GOSUB PRINT_TAB
 	INPUT "GUESS"; guess$ 
 	
@@ -93,10 +93,10 @@ GOTO ROUND_START
 	
 	GOTO ROUND_START
 		
-:GIVE_UP
+GIVE_UP:
 	PRINT "GIVE UP?! HA-HA-HA"
 
-:GAME_OVER
+GAME_OVER:
 	CLS
 	GOSUB HANGMAN
 	PRINT
@@ -104,7 +104,7 @@ GOTO ROUND_START
 	PRINT "YOU COULDN'T GUESS"; word$;" :))))"
 	END
 
-:WIN
+WIN:
 	CLS
 	PRINT "CONGRATULATIONS!"
 	PRINT "YOU HAVE WON!"
